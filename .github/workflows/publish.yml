@@ -32,12 +32,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org
           cache: npm
 
       - run: npm ci
 
       - name: Publish with Trusted Publishing (OIDC)
         run: |
-          npm config delete //registry.npmjs.org/:_authToken || true
+          echo "registry=https://registry.npmjs.org/" > .npmrc
           npm publish --provenance --access public
