@@ -32,16 +32,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          registry-url: https://registry.npmjs.org
 
       - run: npm ci
 
-      - name: Upgrade npm for OIDC support
-        run: npm install -g npm@latest
-
-      - name: Publish with npm Trusted Publishing
-        run: |
-          rm -f "$HOME/.npmrc" "${NPM_CONFIG_USERCONFIG:-}" .npmrc
-          echo "registry=https://registry.npmjs.org/" > .npmrc
-          npm --version
-          npm publish --provenance --access public
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
