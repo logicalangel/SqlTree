@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/sqltree.svg)](https://www.npmjs.com/package/sqltree)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 [![Tests](https://img.shields.io/github/actions/workflow/status/logicalangel/sqltree/test.yml?label=tests)](https://github.com/logicalangel/sqltree/actions)
 [![Coverage](https://img.shields.io/badge/coverage-98%25-brightgreen.svg)](https://github.com/logicalangel/sqltree)
 
