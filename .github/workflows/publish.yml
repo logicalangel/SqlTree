@@ -36,8 +36,12 @@ jobs:
 
       - run: npm ci
 
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
+
       - name: Publish with npm Trusted Publishing
         run: |
           rm -f "$HOME/.npmrc" "${NPM_CONFIG_USERCONFIG:-}" .npmrc
           echo "registry=https://registry.npmjs.org/" > .npmrc
+          npm --version
           npm publish --provenance --access public
