@@ -11,8 +11,8 @@ Navigate your databases with a tree browser, run SQL in a full-screen REPL — a
 
 ```
   ╔══════════════════════════════════════╗
-  ║   🌳 sqltree v1.0                    ║
-  ║   PostgreSQL · MySQL · CLI Client   ║
+  ║   🌳 sqltree v1.3                    ║
+  ║   PostgreSQL · MySQL · CLI Client    ║
   ╚══════════════════════════════════════╝
 ```
 

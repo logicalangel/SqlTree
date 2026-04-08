@@ -748,8 +748,14 @@ function enterReplMode() {
     console.log(chalk.dim('  ← Returning to tree browser...\n'));
     mode = 'tree';
 
-    // readline.close() pauses stdin and unrefs it — restore it before blessed takes over
-    process.stdin.removeAllListeners('keypress');
+    // Fully reset stdin before blessed re-initializes.
+    // readline.close() pauses stdin, disables rawMode, and leaves stale listeners.
+    // blessed's internal _blessedInput/_dataHandler markers must also be cleared
+    // so blessed re-runs _listenInput() and sets up fresh handlers.
+    process.stdin.removeAllListeners();
+    delete process.stdin._blessedInput;
+    delete process.stdin._keypressHandler;
+    delete process.stdin._dataHandler;
     if (process.stdin.isPaused()) process.stdin.resume();
     process.stdin.ref();
 
