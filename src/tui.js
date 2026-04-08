@@ -247,12 +247,12 @@ function createScreen() {
     }
   });
 
-  // Page up / down for detail scroll
-  screen.key(['pageup'], () => {
+  // Shift+Up / Shift+Down for detail scroll
+  screen.key(['S-up'], () => {
     detailBox.scroll(-detailBox.height + 2);
     screen.render();
   });
-  screen.key(['pagedown'], () => {
+  screen.key(['S-down'], () => {
     detailBox.scroll(detailBox.height - 2);
     screen.render();
   });
@@ -466,7 +466,7 @@ async function browseTable(node) {
 
       let content = formatDetailHeader(`${tableName} — Page ${page + 1}/${totalPages} (${total} rows)`);
       content += renderResultContent(result, detailBox.width - 4);
-      content += `\n  {gray-fg}↓: Next  ↑: Prev  ←: Back{/gray-fg}\n`;
+      content += `\n  {gray-fg}↓: Next  ↑: Prev  ←: Back  Shift+↑↓: Scroll{/gray-fg}\n`;
 
       detailBox.setContent(content);
       detailBox.setScroll(0);
@@ -483,7 +483,7 @@ async function browseTable(node) {
       '{bold}↓{/bold} Next page  ' +
       '{bold}↑{/bold} Prev page  ' +
       '{bold}←{/bold} Back  ' +
-      '{bold}PgUp/PgDn{/bold} Scroll'
+      '{bold}Shift+↑↓{/bold} Scroll'
     );
     screen.render();
 

@@ -490,7 +490,7 @@ describe('startTui', () => {
     expect(mockScreen.render).toHaveBeenCalled();
   });
 
-  it('registers up/down/left/right/tab/e/s/r/d/pageup/pagedown keys', async () => {
+  it('registers up/down/left/right/tab/e/s/r/d/S-up/S-down keys', async () => {
     await startTui(mockAdapter);
     expect(keyHandlers['up']).toBeDefined();
     expect(keyHandlers['down']).toBeDefined();
@@ -500,8 +500,8 @@ describe('startTui', () => {
     expect(keyHandlers['e']).toBeDefined();
     expect(keyHandlers['r']).toBeDefined();
     expect(keyHandlers['d']).toBeDefined();
-    expect(keyHandlers['pageup']).toBeDefined();
-    expect(keyHandlers['pagedown']).toBeDefined();
+    expect(keyHandlers['S-up']).toBeDefined();
+    expect(keyHandlers['S-down']).toBeDefined();
   });
 
   it('up/down keys navigate tree', async () => {
@@ -610,10 +610,10 @@ describe('startTui', () => {
     expect(writeFileSync).toHaveBeenCalled();
   });
 
-  it('pageup/pagedown scroll detail', async () => {
+  it('shift+up/shift+down scroll detail', async () => {
     await startTui(mockAdapter);
-    keyHandlers['pageup']();
-    keyHandlers['pagedown']();
+    keyHandlers['S-up']();
+    keyHandlers['S-down']();
     expect(mockScreen.render).toHaveBeenCalled();
   });
 
