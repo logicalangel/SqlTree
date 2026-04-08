@@ -82,7 +82,7 @@ function createScreen() {
     parent: screen,
     top: 1,
     left: 0,
-    width: '30%',
+    width: '25%',
     height: '100%-2',
     border: { type: 'line' },
     style: {
@@ -101,8 +101,8 @@ function createScreen() {
   detailBox = blessed.box({
     parent: screen,
     top: 1,
-    left: '30%',
-    width: '70%',
+    left: '25%',
+    width: '75%',
     height: '100%-2',
     border: { type: 'line' },
     style: {
@@ -113,7 +113,6 @@ function createScreen() {
     scrollbar: { style: { bg: 'cyan' } },
     keys: false,
     tags: true,
-    label: ' {cyan-fg}📋 Detail{/cyan-fg} ',
   });
 
   // Status bar
@@ -211,11 +210,8 @@ function createScreen() {
     doExport();
   });
 
-  // s → Run SQL (quick)
-  screen.key(['s'], () => {
-    if (mode !== 'tree') return;
-    enterReplMode();
-  });
+  // s → Run SQL (quick) — handled in scroll handler above
+  // (kept as comment for clarity; s in tree mode enters REPL)
 
   // r → Refresh tree
   screen.key(['r'], async () => {
@@ -247,12 +243,16 @@ function createScreen() {
     }
   });
 
-  // Shift+Up / Shift+Down for detail scroll
-  screen.key(['S-up'], () => {
+  // w / s for detail scroll
+  screen.key(['w'], () => {
     detailBox.scroll(-detailBox.height + 2);
     screen.render();
   });
-  screen.key(['S-down'], () => {
+  screen.key(['s'], () => {
+    if (mode === 'tree') {
+      enterReplMode();
+      return;
+    }
     detailBox.scroll(detailBox.height - 2);
     screen.render();
   });
@@ -276,6 +276,7 @@ function updateStatusBar() {
       '{bold}Tab/s{/bold} SQL  ' +
       '{bold}d{/bold} Describe  ' +
       '{bold}e{/bold} Export  ' +
+      '{bold}w/s{/bold} Scroll  ' +
       '{bold}r{/bold} Refresh  ' +
       '{bold}q{/bold} Quit'
     );
@@ -466,7 +467,7 @@ async function browseTable(node) {
 
       let content = formatDetailHeader(`${tableName} — Page ${page + 1}/${totalPages} (${total} rows)`);
       content += renderResultContent(result, detailBox.width - 4);
-      content += `\n  {gray-fg}↓: Next  ↑: Prev  ←: Back  Shift+↑↓: Scroll{/gray-fg}\n`;
+      content += `\n  {gray-fg}↓: Next  ↑: Prev  ←: Back  w/s: Scroll{/gray-fg}\n`;
 
       detailBox.setContent(content);
       detailBox.setScroll(0);
@@ -483,7 +484,7 @@ async function browseTable(node) {
       '{bold}↓{/bold} Next page  ' +
       '{bold}↑{/bold} Prev page  ' +
       '{bold}←{/bold} Back  ' +
-      '{bold}Shift+↑↓{/bold} Scroll'
+      '{bold}w/s{/bold} Scroll'
     );
     screen.render();
 
