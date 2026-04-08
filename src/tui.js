@@ -747,6 +747,12 @@ function enterReplMode() {
   rl.on('close', () => {
     console.log(chalk.dim('  ← Returning to tree browser...\n'));
     mode = 'tree';
+
+    // readline.close() pauses stdin and unrefs it — restore it before blessed takes over
+    process.stdin.removeAllListeners('keypress');
+    if (process.stdin.isPaused()) process.stdin.resume();
+    process.stdin.ref();
+
     // Recreate the screen
     createScreen();
     refreshTree();
