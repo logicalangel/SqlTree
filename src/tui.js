@@ -750,12 +750,13 @@ function enterReplMode() {
 
     // Fully reset stdin before blessed re-initializes.
     // readline.close() pauses stdin, disables rawMode, and leaves stale listeners.
-    // blessed's internal _blessedInput/_dataHandler markers must also be cleared
-    // so blessed re-runs _listenInput() and sets up fresh handlers.
+    // blessed's internal markers must be cleared so it re-runs _listenInput()
+    // and keys.emitKeypressEvents() with fresh handlers.
     process.stdin.removeAllListeners();
     delete process.stdin._blessedInput;
     delete process.stdin._keypressHandler;
     delete process.stdin._dataHandler;
+    delete process.stdin._keypressDecoder;
     if (process.stdin.isPaused()) process.stdin.resume();
     process.stdin.ref();
 
