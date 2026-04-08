@@ -606,9 +606,8 @@ function enterReplMode() {
   // Destroy the blessed screen temporarily, enter raw readline REPL
   screen.destroy();
 
-  // Clean up any lingering listeners from blessed to prevent double input in REPL
+  // Clean up lingering keypress listeners from blessed to prevent double input in REPL
   process.stdin.removeAllListeners('keypress');
-  process.stdin.removeAllListeners('data');
 
   console.log('');
   console.log(chalk.magenta.bold('  ┌─────────────────────────────────────┐'));
