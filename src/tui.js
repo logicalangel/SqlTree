@@ -55,6 +55,14 @@ function createScreen() {
     title: 'sqltree',
   });
 
+  // neo-blessed's first initialization enables Node's internal keypress module,
+  // which adds a duplicate 'data' listener on stdin causing double key events.
+  // Keep only blessed's own program listener.
+  while (process.stdin.listenerCount('data') > 1) {
+    const listeners = process.stdin.rawListeners('data');
+    process.stdin.removeListener('data', listeners[0]);
+  }
+
   // Header
   headerBar = blessed.box({
     parent: screen,
@@ -598,8 +606,9 @@ function enterReplMode() {
   // Destroy the blessed screen temporarily, enter raw readline REPL
   screen.destroy();
 
-  // Clean up any lingering keypress listeners from blessed to prevent double input
+  // Clean up any lingering listeners from blessed to prevent double input in REPL
   process.stdin.removeAllListeners('keypress');
+  process.stdin.removeAllListeners('data');
 
   console.log('');
   console.log(chalk.magenta.bold('  ┌─────────────────────────────────────┐'));
