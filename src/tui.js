@@ -82,7 +82,7 @@ function createScreen() {
     parent: screen,
     top: 1,
     left: 0,
-    width: '40%',
+    width: '30%',
     height: '100%-2',
     border: { type: 'line' },
     style: {
@@ -101,8 +101,8 @@ function createScreen() {
   detailBox = blessed.box({
     parent: screen,
     top: 1,
-    left: '40%',
-    width: '60%',
+    left: '30%',
+    width: '70%',
     height: '100%-2',
     border: { type: 'line' },
     style: {
