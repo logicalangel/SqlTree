@@ -466,7 +466,7 @@ async function browseTable(node) {
 
       let content = formatDetailHeader(`${tableName} — Page ${page + 1}/${totalPages} (${total} rows)`);
       content += renderResultContent(result, detailBox.width - 4);
-      content += `\n  {gray-fg}→: Next  ←: Back{/gray-fg}\n`;
+      content += `\n  {gray-fg}↓: Next  ↑: Prev  ←: Back{/gray-fg}\n`;
 
       detailBox.setContent(content);
       detailBox.setScroll(0);
@@ -480,7 +480,8 @@ async function browseTable(node) {
     mode = 'browse';
     statusBar.setContent(
       ' {bold}Browse{/bold}  ' +
-      '{bold}→{/bold} Next page  ' +
+      '{bold}↓{/bold} Next page  ' +
+      '{bold}↑{/bold} Prev page  ' +
       '{bold}←{/bold} Back  ' +
       '{bold}PgUp/PgDn{/bold} Scroll'
     );
@@ -488,7 +489,8 @@ async function browseTable(node) {
 
     const cleanup = () => {
       browseCleanup = null;
-      screen.unkey(['right'], nextHandler);
+      screen.unkey(['down'], nextHandler);
+      screen.unkey(['up'], prevHandler);
       mode = prevMode;
       updateStatusBar();
       refreshDetail();
@@ -503,8 +505,17 @@ async function browseTable(node) {
       }
     };
 
+    const prevHandler = async () => {
+      if (mode !== 'browse') return;
+      if (page > 0) {
+        page--;
+        await loadPage();
+      }
+    };
+
     browseCleanup = cleanup;
-    screen.key(['right'], nextHandler);
+    screen.key(['down'], nextHandler);
+    screen.key(['up'], prevHandler);
   } catch (err) {
     detailBox.setContent(`{red-fg}  Error: ${esc(err.message)}{/red-fg}`);
     screen.render();

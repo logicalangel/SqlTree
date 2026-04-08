@@ -723,22 +723,25 @@ describe('startTui', () => {
     expect(mockScreen.render).toHaveBeenCalled();
   });
 
-  it('browse pagination — next page and exit via left', async () => {
+  it('browse pagination — next/prev page and exit via left', async () => {
     await startTui(mockAdapter);
     for (let i = 0; i < 4; i++) keyHandlers['down']();
 
     mockAdapter.query
       .mockResolvedValueOnce({ type: 'rows', columns: ['total'], rows: [{ total: 50 }], rowCount: 1, time: 1 })
       .mockResolvedValueOnce({ type: 'rows', columns: ['id'], rows: [{ id: 1 }], rowCount: 1, time: 1 })
-      .mockResolvedValueOnce({ type: 'rows', columns: ['id'], rows: [{ id: 2 }], rowCount: 1, time: 1 });
+      .mockResolvedValueOnce({ type: 'rows', columns: ['id'], rows: [{ id: 2 }], rowCount: 1, time: 1 })
+      .mockResolvedValueOnce({ type: 'rows', columns: ['id'], rows: [{ id: 1 }], rowCount: 1, time: 1 });
 
     await keyHandlers['right'](); // enter browse
-    await keyHandlers['right'](); // next page (browse handler overrides)
+    await keyHandlers['down'](); // next page
     expect(mockAdapter.query).toHaveBeenCalled();
+    await keyHandlers['up'](); // prev page
+    expect(mockScreen.render).toHaveBeenCalled();
     keyHandlers['left'](); // back to tree
   });
 
-  it('browse right handler no-op when already on last page', async () => {
+  it('browse down handler no-op when already on last page', async () => {
     await startTui(mockAdapter);
     for (let i = 0; i < 4; i++) keyHandlers['down']();
 
@@ -749,7 +752,7 @@ describe('startTui', () => {
 
     await keyHandlers['right'](); // enter browse
     const callsBefore = mockAdapter.query.mock.calls.length;
-    await keyHandlers['right'](); // no-op, only 1 page
+    await keyHandlers['down'](); // no-op, only 1 page
     expect(mockAdapter.query.mock.calls.length).toBe(callsBefore);
   });
 
