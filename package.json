@@ -1,6 +1,6 @@
 {
   "name": "sqltree",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Interactive TUI database client for PostgreSQL, MySQL, and compatible databases",
   "type": "module",
   "bin": {
